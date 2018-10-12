@@ -2,7 +2,7 @@ CREATE TABLE banks (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     url VARCHAR(100) NOT NULL,
-    isParse BOOLEAN NOT NULL
+    parsing BOOLEAN NOT NULL
 );
 
 CREATE TABLE currencies (
