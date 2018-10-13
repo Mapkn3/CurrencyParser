@@ -47,7 +47,7 @@ public class BankController {
         return bankService.getBank(id).getCurrencies();
     }
 
-    @PostMapping("/{bankId}/currencies/{currencyId}")
+    @PostMapping("/{bankId}/currencies/{currencyId:\\d+}")
     public Set<CurrenciesEntity> addCurrencyForBankById(@PathVariable("bankId") int bankId, @PathVariable("currencyId") int currencyId) {
         BanksEntity bank = bankService.getBank(bankId);
         Set<CurrenciesEntity> currencies = bank.getCurrencies();
@@ -57,7 +57,7 @@ public class BankController {
         return currencies;
     }
 
-    @DeleteMapping("/{bankId}/currencies/{currencyId}")
+    @DeleteMapping("/{bankId}/currencies/{currencyId:\\d+}")
     public Set<CurrenciesEntity> deleteCurrencyForBankById(@PathVariable("bankId") int bankId, @PathVariable("currencyId") int currencyId) {
         BanksEntity bank = bankService.getBank(bankId);
         Set<CurrenciesEntity> currencies = bank.getCurrencies();
@@ -66,8 +66,8 @@ public class BankController {
         bankService.updateBank(bank);
         return currencies;
     }
-/*
-    @PostMapping("/{id}/currencies/{currency}")
+
+    @PostMapping("/{id}/currencies/{currency:\\D+}")
     public Set<CurrenciesEntity> addCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         BanksEntity bank = bankService.getBank(bankId);
         Set<CurrenciesEntity> currencies = bank.getCurrencies();
@@ -77,7 +77,7 @@ public class BankController {
         return currencies;
     }
 
-    @DeleteMapping("/{id}/currencies/{currency}")
+    @DeleteMapping("/{id}/currencies/{currency:\\D+}")
     public Set<CurrenciesEntity> deleteCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         BanksEntity bank = bankService.getBank(bankId);
         Set<CurrenciesEntity> currencies = bank.getCurrencies();
@@ -86,5 +86,4 @@ public class BankController {
         bankService.updateBank(bank);
         return currencies;
     }
-*/
 }
