@@ -1,6 +1,7 @@
 package ru.mapkn3.currencyParser.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.List;
 @Service
 @Transactional
 public class CurrencyServiceImpl implements CurrencyService {
-    private final static Logger logger = Logger.getLogger(BankServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(BankServiceImpl.class);
 
     @Autowired
     CurrenciesRepository repository;
@@ -21,7 +22,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = true)
     public CurrenciesEntity getCurrency(int id) {
         logger.debug("Getting currency with id=" + id);
-        return repository.findById(id);
+        return repository.findById(id).get();
     }
 
     @Override
@@ -34,15 +35,15 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public List<CurrenciesEntity> getAllCurrencies() {
-        List<CurrenciesEntity> currencies = repository.findAll();
+        List<CurrenciesEntity> currencies = (List<CurrenciesEntity>) repository.findAll();
         logger.debug("Get " + currencies.size() + " currencies:");
-        currencies.forEach(logger::debug);
+        currencies.forEach(currency -> logger.debug(currency.toString()));
         return currencies;
     }
 
     @Override
     public Integer addCurrency(CurrenciesEntity currency) {
-        Integer id = repository.save(currency);
+        Integer id = repository.save(currency).getId();
         logger.debug("Id of new currency: " + id);
         return id;
     }

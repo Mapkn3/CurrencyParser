@@ -15,7 +15,7 @@ CREATE TABLE currency_rates (
     parse_time TIMESTAMP NOT NULL,
     currency_update_time TIMESTAMP NOT NULL,
     currency_id INTEGER REFERENCES currencies (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-    selling_rate MONEY NOT NULL,
-    purchase_rate MONEY NOT NULL,
+    selling_rate NUMERIC(8, 2) NOT NULL,
+    purchase_rate NUMERIC(8, 2) NOT NULL,
     bank_id INTEGER REFERENCES banks (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );

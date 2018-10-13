@@ -1,6 +1,7 @@
 package ru.mapkn3.currencyParser.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 public class CurrencyRateServiceImpl implements CurrencyRateService {
-    private final static Logger logger = Logger.getLogger(BankServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(BankServiceImpl.class);
 
     @Autowired
     CurrencyRatesRepository repository;
@@ -22,7 +23,7 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
     @Transactional(readOnly = true)
     public CurrencyRatesEntity getCurrencyRate(int id) {
         logger.debug("Getting currency rate with id=" + id);
-        return repository.findById(id);
+        return repository.findById(id).get();
     }
 
     @Override
@@ -35,9 +36,9 @@ public class CurrencyRateServiceImpl implements CurrencyRateService {
     @Override
     @Transactional(readOnly = true)
     public List<CurrencyRatesEntity> getAllCurrencyRates() {
-        List<CurrencyRatesEntity> currencyRates = repository.findAll();
+        List<CurrencyRatesEntity> currencyRates = (List<CurrencyRatesEntity>) repository.findAll();
         logger.debug("Get " + currencyRates.size() + "currency rates:");
-        currencyRates.forEach(logger::debug);
+        currencyRates.forEach(currencyRate -> logger.debug(currencyRate.toString()));
         return currencyRates;
     }
 

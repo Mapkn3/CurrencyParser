@@ -1,6 +1,7 @@
 package ru.mapkn3.currencyParser.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.List;
 @Service
 @Transactional
 public class BankServiceImpl implements BankService {
-    private final static Logger logger = Logger.getLogger(BankServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(BankServiceImpl.class);
 
     @Autowired
     BanksRepository repository;
@@ -29,8 +30,8 @@ public class BankServiceImpl implements BankService {
     public List<BanksEntity> getAllBanks() {
         List<BanksEntity> banks = (List<BanksEntity>) repository.findAll();
         logger.debug("Get " + banks.size() + " banks:");
-        banks.forEach(logger::debug);
-        return null;
+        banks.forEach(bank -> logger.debug(bank.toString()));
+        return banks;
     }
 
     @Override

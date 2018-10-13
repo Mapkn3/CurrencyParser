@@ -1,6 +1,7 @@
 package ru.mapkn3.currencyParser.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -10,8 +11,8 @@ public class CurrencyRatesEntity {
     private int id;
     private Timestamp parseTime;
     private Timestamp currencyUpdateTime;
-    private Object sellingRate;
-    private Object purchaseRate;
+    private BigDecimal sellingRate;
+    private BigDecimal purchaseRate;
     private CurrenciesEntity currency;
     private BanksEntity bank;
 
@@ -48,21 +49,21 @@ public class CurrencyRatesEntity {
 
     @Basic
     @Column(name = "selling_rate")
-    public Object getSellingRate() {
+    public BigDecimal getSellingRate() {
         return sellingRate;
     }
 
-    public void setSellingRate(Object sellingRate) {
+    public void setSellingRate(BigDecimal sellingRate) {
         this.sellingRate = sellingRate;
     }
 
     @Basic
     @Column(name = "purchase_rate")
-    public Object getPurchaseRate() {
+    public BigDecimal getPurchaseRate() {
         return purchaseRate;
     }
 
-    public void setPurchaseRate(Object purchaseRate) {
+    public void setPurchaseRate(BigDecimal purchaseRate) {
         this.purchaseRate = purchaseRate;
     }
 
