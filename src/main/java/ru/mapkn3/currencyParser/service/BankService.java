@@ -9,6 +9,8 @@ public interface BankService {
 
     List<BanksEntity> getAllBanks();
 
+    List<BanksEntity> getParsingBanks();
+
     Integer addNewBank(BanksEntity bank);
 
     BanksEntity updateBank(BanksEntity bank);

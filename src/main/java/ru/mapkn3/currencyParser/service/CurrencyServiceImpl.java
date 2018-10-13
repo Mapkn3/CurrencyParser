@@ -35,7 +35,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     @Transactional(readOnly = true)
     public List<CurrenciesEntity> getAllCurrencies() {
-        List<CurrenciesEntity> currencies = (List<CurrenciesEntity>) repository.findAll();
+        List<CurrenciesEntity> currencies = repository.findAll();
         logger.debug("Get " + currencies.size() + " currencies:");
         currencies.forEach(currency -> logger.debug(currency.toString()));
         return currencies;

@@ -9,6 +9,11 @@ CREATE TABLE currencies (
     id SERIAL PRIMARY KEY,
     currency VARCHAR(3) NOT NULL
 );
+CREATE TABLE currencies_for_bank (
+    currency_id INTEGER REFERENCES currencies (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    bank_id INTEGER REFERENCES banks (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    PRIMARY KEY (currency_id, bank_id)
+);
 
 CREATE TABLE currency_rates (
     id SERIAL PRIMARY KEY,
@@ -19,3 +24,4 @@ CREATE TABLE currency_rates (
     purchase_rate NUMERIC(8, 2) NOT NULL,
     bank_id INTEGER REFERENCES banks (id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
+

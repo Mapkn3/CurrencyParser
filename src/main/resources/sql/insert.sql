@@ -25,3 +25,6 @@ INSERT INTO currencies(currency) VALUES ('GBR');
 INSERT INTO currencies(currency) VALUES ('CHF');
 INSERT INTO currencies(currency) VALUES ('CNY');
 INSERT INTO currencies(currency) VALUES ('JPY');
+
+INSERT INTO currencies_for_bank VALUES (1, 1);
+INSERT INTO currencies_for_bank VALUES (2, 1);

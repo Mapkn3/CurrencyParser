@@ -2,6 +2,7 @@ package ru.mapkn3.currencyParser.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "banks", schema = "public", catalog = "postgres")
@@ -10,6 +11,7 @@ public class BanksEntity {
     private String name;
     private String url;
     private boolean parsing;
+    private Set<CurrenciesEntity> currencies;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +73,19 @@ public class BanksEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, url, parsing);
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "currencies_for_bank",
+            joinColumns = {@JoinColumn(name = "bank_id")},
+            inverseJoinColumns = {@JoinColumn(name = "currency_id")}
+    )
+    public Set<CurrenciesEntity> getCurrencies() {
+        return currencies;
+    }
+
+    public void setCurrencies(Set<CurrenciesEntity> currencies) {
+        this.currencies = currencies;
     }
 }

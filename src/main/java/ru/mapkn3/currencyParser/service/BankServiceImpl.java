@@ -28,8 +28,16 @@ public class BankServiceImpl implements BankService {
     @Override
     @Transactional(readOnly = true)
     public List<BanksEntity> getAllBanks() {
-        List<BanksEntity> banks = (List<BanksEntity>) repository.findAll();
+        List<BanksEntity> banks = repository.findAll();
         logger.debug("Get " + banks.size() + " banks:");
+        banks.forEach(bank -> logger.debug(bank.toString()));
+        return banks;
+    }
+
+    @Override
+    public List<BanksEntity> getParsingBanks() {
+        List<BanksEntity> banks = repository.findAllByParsingIsTrue();
+        logger.debug("Get " + banks.size() + " banks ready for parsing:");
         banks.forEach(bank -> logger.debug(bank.toString()));
         return banks;
     }
