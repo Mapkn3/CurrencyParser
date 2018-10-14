@@ -49,41 +49,41 @@ public class BankController {
 
     @PostMapping("/{id}/currencies/{currencyId:\\d+}")
     public Set<CurrenciesEntity> addCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
-        BanksEntity bank = bankService.getBank(bankId);
-        Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        CurrenciesEntity currency = currencyService.getCurrency(currencyId);
-        currencies.add(currency);
-        bankService.updateBank(bank);
-        return currencies;
+        return addCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
     @DeleteMapping("/{id}/currencies/{currencyId:\\d+}")
     public Set<CurrenciesEntity> deleteCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
-        BanksEntity bank = bankService.getBank(bankId);
-        Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        CurrenciesEntity currency = currencyService.getCurrency(currencyId);
-        currencies.remove(currency);
-        bankService.updateBank(bank);
-        return currencies;
+        return deleteCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
     @PostMapping("/{id}/currencies/{currency:\\D+}")
     public Set<CurrenciesEntity> addCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
-        BanksEntity bank = bankService.getBank(bankId);
-        Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        CurrenciesEntity currency = currencyService.getCurrencyByName(currencyName);
-        currencies.add(currency);
-        bankService.updateBank(bank);
-        return currencies;
+        return addCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
     }
 
     @DeleteMapping("/{id}/currencies/{currency:\\D+}")
     public Set<CurrenciesEntity> deleteCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
+        return deleteCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
+    }
+
+    private Set<CurrenciesEntity> addCurrencyForBank(int bankId, CurrenciesEntity currency) {
         BanksEntity bank = bankService.getBank(bankId);
         Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        CurrenciesEntity currency = currencyService.getCurrencyByName(currencyName);
-        currencies.remove(currency);
-        bankService.updateBank(bank);
+        if (currency != null) {
+            currencies.add(currency);
+            bankService.updateBank(bank);
+        }
+        return currencies;
+    }
+
+    private Set<CurrenciesEntity> deleteCurrencyForBank(int bankId, CurrenciesEntity currency) {
+        BanksEntity bank = bankService.getBank(bankId);
+        Set<CurrenciesEntity> currencies = bank.getCurrencies();
+        if (currency != null) {
+            currencies.remove(currency);
+            bankService.updateBank(bank);
+        }
         return currencies;
     }
 }

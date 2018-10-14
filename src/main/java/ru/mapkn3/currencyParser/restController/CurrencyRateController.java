@@ -66,7 +66,7 @@ public class CurrencyRateController {
     }
 
     @GetMapping("/{currencyId:\\d+}/{startDate:20\\d\\d-0[1-9]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T2[0-3]:[0-5]\\d:[0-5]\\d}/{endDate:20\\d\\d-0[1-9]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T2[0-3]:[0-5]\\d:[0-5]\\d}/{bankId}")
-    public List<BigDecimal> getSellingRatesBetweenDateForBankForCurrentById(@PathVariable("currencyId") int currencyId,
+    public List<BigDecimal> getSellingRatesBetweenDateForBankForCurrencyById(@PathVariable("currencyId") int currencyId,
                                                                             @PathVariable("bankId") int bankId,
                                                                             @PathVariable("startDate") String startDate,
                                                                             @PathVariable("endDate") String endDate) {
@@ -79,14 +79,11 @@ public class CurrencyRateController {
         }
         CurrenciesEntity currency = currencyService.getCurrency(currencyId);
         BanksEntity bank = bankService.getBank(bankId);
-        List<CurrencyRatesEntity> currencyRates = currencyRateService.getAllCurrencyRateByCurrencyAndBankAndDateBetween(currency, bank, start, end);
-        List<BigDecimal> sellingRates = new ArrayList<>();
-        currencyRates.forEach(currencyRate -> sellingRates.add(currencyRate.getSellingRate()));
-        return sellingRates;
+        return getSellingRatesBetweenDateForBankForCurrency(currency, bank, start, end);
     }
 
     @GetMapping("/{currencyName:\\D+}/{startDate:20\\d\\d-0[1-9]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T2[0-3]:[0-5]\\d:[0-5]\\d}/{endDate:20\\d\\d-0[1-9]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[1-9]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-0[1-9]T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-[12]\\dT2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13-9]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[012]-30T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-0[13578]-31T2[0-3]:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T[01]\\d:[0-5]\\d:[0-5]\\d|20\\d\\d-1[02]-31T2[0-3]:[0-5]\\d:[0-5]\\d}/{bankId}")
-    public List<BigDecimal> getSellingRatesBetweenDateForBankForCurrentByName(@PathVariable("currencyName") String currencyName,
+    public List<BigDecimal> getSellingRatesBetweenDateForBankForCurrencyByName(@PathVariable("currencyName") String currencyName,
                                                                             @PathVariable("bankId") int bankId,
                                                                             @PathVariable("startDate") String startDate,
                                                                             @PathVariable("endDate") String endDate) {
@@ -99,7 +96,11 @@ public class CurrencyRateController {
         }
         CurrenciesEntity currency = currencyService.getCurrencyByName(currencyName);
         BanksEntity bank = bankService.getBank(bankId);
-        List<CurrencyRatesEntity> currencyRates = currencyRateService.getAllCurrencyRateByCurrencyAndBankAndDateBetween(currency, bank, start, end);
+        return getSellingRatesBetweenDateForBankForCurrency(currency, bank, start, end);
+    }
+
+    private List<BigDecimal> getSellingRatesBetweenDateForBankForCurrency(CurrenciesEntity currency, BanksEntity bank, Timestamp startDate, Timestamp endDate) {
+        List<CurrencyRatesEntity> currencyRates = currencyRateService.getAllCurrencyRateByCurrencyAndBankAndDateBetween(currency, bank, startDate, endDate);
         List<BigDecimal> sellingRates = new ArrayList<>();
         currencyRates.forEach(currencyRate -> sellingRates.add(currencyRate.getSellingRate()));
         return sellingRates;
