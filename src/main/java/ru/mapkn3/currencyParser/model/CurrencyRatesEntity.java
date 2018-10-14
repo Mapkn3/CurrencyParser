@@ -16,6 +16,18 @@ public class CurrencyRatesEntity {
     private CurrenciesEntity currency;
     private BanksEntity bank;
 
+    public CurrencyRatesEntity() {
+    }
+
+    public CurrencyRatesEntity(Timestamp parseTime, Timestamp currencyUpdateTime, BigDecimal sellingRate, BigDecimal purchaseRate, CurrenciesEntity currency, BanksEntity bank) {
+        this.parseTime = parseTime;
+        this.currencyUpdateTime = currencyUpdateTime;
+        this.sellingRate = sellingRate;
+        this.purchaseRate = purchaseRate;
+        this.currency = currency;
+        this.bank = bank;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

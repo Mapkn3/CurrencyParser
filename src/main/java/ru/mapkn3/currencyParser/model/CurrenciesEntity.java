@@ -9,6 +9,13 @@ public class CurrenciesEntity {
     private int id;
     private String currency;
 
+    public CurrenciesEntity() {
+    }
+
+    public CurrenciesEntity(String currency) {
+        this.currency = currency;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

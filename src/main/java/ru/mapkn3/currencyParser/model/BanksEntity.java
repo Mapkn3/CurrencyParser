@@ -13,6 +13,16 @@ public class BanksEntity {
     private boolean parsing;
     private Set<CurrenciesEntity> currencies;
 
+    public BanksEntity() {
+    }
+
+    public BanksEntity(String name, String url, boolean parsing, Set<CurrenciesEntity> currencies) {
+        this.name = name;
+        this.url = url;
+        this.parsing = parsing;
+        this.currencies = currencies;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

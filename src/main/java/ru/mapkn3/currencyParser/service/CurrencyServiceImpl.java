@@ -22,14 +22,22 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional(readOnly = true)
     public CurrenciesEntity getCurrency(int id) {
         logger.debug("Getting currency with id=" + id);
-        return repository.findById(id).get();
+        CurrenciesEntity currenciesEntity = repository.findById(id).orElse(null);
+        if (currenciesEntity == null) {
+            logger.debug("Currency with id=" + id + " not found");
+        }
+        return currenciesEntity;
     }
 
     @Override
     @Transactional(readOnly = true)
     public CurrenciesEntity getCurrencyByName(String currency) {
         logger.debug("Getting currency with name: " + currency);
-        return repository.findByCurrency(currency);
+        CurrenciesEntity currenciesEntity = repository.findByCurrency(currency).orElse(null);
+        if (currenciesEntity == null) {
+            logger.debug("Currency with name " + currency + " not found");
+        }
+        return currenciesEntity;
     }
 
     @Override

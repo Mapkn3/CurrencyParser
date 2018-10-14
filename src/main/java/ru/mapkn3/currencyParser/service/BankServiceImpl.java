@@ -22,7 +22,11 @@ public class BankServiceImpl implements BankService {
     @Transactional(readOnly = true)
     public BanksEntity getBank(int id) {
         logger.debug("Getting bank with id=" + id);
-        return repository.findById(id).get();
+        BanksEntity banksEntity = repository.findById(id).orElse(null);
+        if (banksEntity == null) {
+            logger.debug("Bank with id=" + id + " not found");
+        }
+        return banksEntity;
     }
 
     @Override
