@@ -28,7 +28,7 @@ public class CurrencyRateController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public void parseAll() {
+    public void parseAllNow() {
         for (BanksEntity bank : bankService.getAllBanks()) {
             for (CurrenciesEntity currency : bank.getCurrencies()) {
                 currencyRateService.parseCurrencyRateForBank(currency.getId(), bank.getId());

@@ -85,7 +85,7 @@ public class BanksEntity {
         return Objects.hash(id, name, url, parsing);
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "currencies_for_bank",
             joinColumns = {@JoinColumn(name = "bank_id")},
