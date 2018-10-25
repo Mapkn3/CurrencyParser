@@ -1,21 +1,59 @@
 package ru.mapkn3.currencyParser.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "currency_rates", schema = "public", catalog = "postgres")
 public class CurrencyRatesEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "parse_time")
     private Timestamp parseTime;
+
+    @Basic
+    @Column(name = "currency_update_time")
     private Timestamp currencyUpdateTime;
+
+    @Basic
+    @Column(name = "selling_rate")
     private BigDecimal sellingRate;
+
+    @Basic
+    @Column(name = "purchase_rate")
     private BigDecimal purchaseRate;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id", referencedColumnName = "id", nullable = false)
     private CurrenciesEntity currency;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id", referencedColumnName = "id", nullable = false)
     private BanksEntity bank;
 
+    @Override
+    public String toString() {
+        return String.format("%d -> %s (%tc) %s: %.2f|%.2f - %tc",
+                this.id, this.bank.getName(), this.parseTime, this.currency.getCurrency(), this.sellingRate, this.purchaseRate, this.currencyUpdateTime);
+    }
+
+    public CurrencyRatesEntity(Timestamp parseTime, Timestamp currencyUpdateTime, BigDecimal sellingRate, BigDecimal purchaseRate, CurrenciesEntity currency, BanksEntity bank) {
+        this.parseTime = parseTime;
+        this.currencyUpdateTime = currencyUpdateTime;
+        this.sellingRate = sellingRate;
+        this.purchaseRate = purchaseRate;
+        this.currency = currency;
+        this.bank = bank;
+    }
+/*
     public CurrencyRatesEntity() {
     }
 
@@ -121,4 +159,5 @@ public class CurrencyRatesEntity {
     public void setBank(BanksEntity bank) {
         this.bank = bank;
     }
+*/
 }

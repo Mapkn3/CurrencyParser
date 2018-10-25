@@ -1,13 +1,27 @@
 package ru.mapkn3.currencyParser.model;
 
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.Data;
 
+import javax.persistence.*;
+
+@Data
 @Entity
 @Table(name = "currencies", schema = "public", catalog = "postgres")
 public class CurrenciesEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "currency")
     private String currency;
+
+    @Override
+    public String toString() {
+        return String.format("%d -> %s", this.id, this.currency);
+    }
+/*
 
     public CurrenciesEntity() {
     }
@@ -55,4 +69,5 @@ public class CurrenciesEntity {
     public int hashCode() {
         return Objects.hash(id, currency);
     }
+*/
 }

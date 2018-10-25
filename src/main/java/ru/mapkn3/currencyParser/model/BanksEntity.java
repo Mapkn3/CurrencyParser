@@ -1,18 +1,44 @@
 package ru.mapkn3.currencyParser.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "banks", schema = "public", catalog = "postgres")
 public class BanksEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "name")
     private String name;
+
+    @Basic
+    @Column(name = "url")
     private String url;
+
+    @Basic
+    @Column(name = "parsing")
     private boolean parsing;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "currencies_for_bank",
+            joinColumns = {@JoinColumn(name = "bank_id")},
+            inverseJoinColumns = {@JoinColumn(name = "currency_id")}
+    )
     private Set<CurrenciesEntity> currencies;
 
+    @Override
+    public String toString() {
+        return String.format("%d -> %s: %s [%b]", this.id, this.name, this.url, this.parsing);
+    }
+/*
     public BanksEntity() {
     }
 
@@ -98,4 +124,5 @@ public class BanksEntity {
     public void setCurrencies(Set<CurrenciesEntity> currencies) {
         this.currencies = currencies;
     }
+*/
 }
