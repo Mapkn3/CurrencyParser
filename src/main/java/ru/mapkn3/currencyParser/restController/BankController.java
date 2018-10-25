@@ -2,6 +2,7 @@ package ru.mapkn3.currencyParser.restController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mapkn3.currencyParser.model.BanksEntity;
 import ru.mapkn3.currencyParser.model.CurrenciesEntity;
@@ -14,76 +15,106 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "/bank", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BankController {
+    private final String INVALID_BANK_ID_MESSAGE = "Invalid bank id";
+    private final ResponseEntity invalidBankIdResponseEntity = ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(INVALID_BANK_ID_MESSAGE);
+
     @Autowired
     private BankService bankService;
     @Autowired
     private CurrencyService currencyService;
 
     @GetMapping("/all")
-    public List<BanksEntity> getAllBanks() {
-        return bankService.getAllBanks();
+    public ResponseEntity<List<BanksEntity>> getAllBanks() {
+        return ResponseEntity.ok(bankService.getAllBanks());
     }
 
     @GetMapping("/parsing")
-    public List<BanksEntity> getAllParsingBanks() {
-        return bankService.getParsingBanks();
+    public ResponseEntity<List<BanksEntity>> getAllParsingBanks() {
+        return ResponseEntity.ok(bankService.getParsingBanks());
     }
 
     @GetMapping("/{id}")
-    public BanksEntity getBank(@PathVariable("id") int id) {
-        return bankService.getBank(id);
+    public ResponseEntity getBank(@PathVariable("id") int id) {
+        BanksEntity bank = bankService.getBank(id);
+        if (bank != null) {
+            return ResponseEntity.ok(bankService.getBank(id));
+        } else {
+            return invalidBankIdResponseEntity;
+        }
     }
 
     @PutMapping("/{id}")
-    public BanksEntity changeParsing(@PathVariable("id") int id) {
+    public ResponseEntity changeParsing(@PathVariable("id") int id) {
         BanksEntity bank = bankService.getBank(id);
-        bank.setParsing(!bank.isParsing());
-        bankService.updateBank(bank);
-        return bank;
+        if (bank != null) {
+            bank.setParsing(!bank.isParsing());
+            bankService.updateBank(bank);
+            return ResponseEntity.ok(bank);
+        } else {
+            return invalidBankIdResponseEntity;
+        }
     }
 
     @GetMapping("/{id}/currencies")
-    public Set<CurrenciesEntity> getCurrenciesForBank(@PathVariable("id") int id) {
-        return bankService.getBank(id).getCurrencies();
+    public ResponseEntity getCurrenciesForBank(@PathVariable("id") int id) {
+        BanksEntity bank = bankService.getBank(id);
+        if (bank != null) {
+            return ResponseEntity.ok(bank.getCurrencies());
+        } else {
+            return invalidBankIdResponseEntity;
+        }
     }
 
     @PostMapping("/{id}/currencies/{currencyId:\\d+}")
-    public Set<CurrenciesEntity> addCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
+    public ResponseEntity addCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
         return addCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
     @DeleteMapping("/{id}/currencies/{currencyId:\\d+}")
-    public Set<CurrenciesEntity> deleteCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
+    public ResponseEntity deleteCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
         return deleteCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
     @PostMapping("/{id}/currencies/{currency:\\D+}")
-    public Set<CurrenciesEntity> addCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
+    public ResponseEntity addCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         return addCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
     }
 
     @DeleteMapping("/{id}/currencies/{currency:\\D+}")
-    public Set<CurrenciesEntity> deleteCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
+    public ResponseEntity deleteCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         return deleteCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
     }
 
-    private Set<CurrenciesEntity> addCurrencyForBank(int bankId, CurrenciesEntity currency) {
+    private ResponseEntity addCurrencyForBank(int bankId, CurrenciesEntity currency) {
         BanksEntity bank = bankService.getBank(bankId);
-        Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        if (currency != null) {
-            currencies.add(currency);
-            bankService.updateBank(bank);
+        if (bank != null) {
+            if (currency != null) {
+                Set<CurrenciesEntity> currencies = bank.getCurrencies();
+                currencies.add(currency);
+                bankService.updateBank(bank);
+                return ResponseEntity.ok(currencies);
+            } else {
+                return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("Invalid currency");
+            }
+        } else {
+            return invalidBankIdResponseEntity;
         }
-        return currencies;
+
     }
 
-    private Set<CurrenciesEntity> deleteCurrencyForBank(int bankId, CurrenciesEntity currency) {
+    private ResponseEntity deleteCurrencyForBank(int bankId, CurrenciesEntity currency) {
         BanksEntity bank = bankService.getBank(bankId);
-        Set<CurrenciesEntity> currencies = bank.getCurrencies();
-        if (currency != null) {
-            currencies.remove(currency);
-            bankService.updateBank(bank);
+        if (bank != null) {
+            if (currency != null) {
+                Set<CurrenciesEntity> currencies = bank.getCurrencies();
+                currencies.remove(currency);
+                bankService.updateBank(bank);
+                return ResponseEntity.ok(currencies);
+            } else {
+                return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("Invalid currency");
+            }
+        } else {
+            return invalidBankIdResponseEntity;
         }
-        return currencies;
     }
 }
