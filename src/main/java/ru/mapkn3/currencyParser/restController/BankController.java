@@ -33,7 +33,7 @@ public class BankController {
         return ResponseEntity.ok(bankService.getParsingBanks());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public ResponseEntity getBank(@PathVariable("id") int id) {
         BanksEntity bank = bankService.getBank(id);
         if (bank != null) {
@@ -43,7 +43,7 @@ public class BankController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     public ResponseEntity changeParsing(@PathVariable("id") int id) {
         BanksEntity bank = bankService.getBank(id);
         if (bank != null) {
@@ -55,7 +55,7 @@ public class BankController {
         }
     }
 
-    @GetMapping("/{id}/currencies")
+    @GetMapping("/{id:\\d+}/currencies")
     public ResponseEntity getCurrenciesForBank(@PathVariable("id") int id) {
         BanksEntity bank = bankService.getBank(id);
         if (bank != null) {
@@ -65,22 +65,22 @@ public class BankController {
         }
     }
 
-    @PostMapping("/{id}/currencies/{currencyId:\\d+}")
+    @PostMapping("/{id:\\d+}/currencies/{currencyId:\\d+}")
     public ResponseEntity addCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
         return addCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
-    @DeleteMapping("/{id}/currencies/{currencyId:\\d+}")
+    @DeleteMapping("/{id:\\d+}/currencies/{currencyId:\\d+}")
     public ResponseEntity deleteCurrencyForBankById(@PathVariable("id") int bankId, @PathVariable("currencyId") int currencyId) {
         return deleteCurrencyForBank(bankId, currencyService.getCurrency(currencyId));
     }
 
-    @PostMapping("/{id}/currencies/{currency:\\D+}")
+    @PostMapping("/{id:\\d+}/currencies/{currency:\\D+}")
     public ResponseEntity addCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         return addCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
     }
 
-    @DeleteMapping("/{id}/currencies/{currency:\\D+}")
+    @DeleteMapping("/{id:\\d+}/currencies/{currency:\\D+}")
     public ResponseEntity deleteCurrencyForBankByName(@PathVariable("id") int bankId, @PathVariable("currency") String currencyName) {
         return deleteCurrencyForBank(bankId, currencyService.getCurrencyByName(currencyName));
     }
