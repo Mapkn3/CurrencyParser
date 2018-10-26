@@ -17,7 +17,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'ru.mapkn3'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = 1.8
 
 repositories {
@@ -47,6 +47,7 @@ dependencies {
     compile('org.seleniumhq.selenium:selenium-remote-driver:3.14.0')
 
     compile('io.springfox:springfox-swagger2:2.9.2')
+    compile('io.springfox:springfox-swagger-ui:2.9.2')
     
     compileOnly('org.projectlombok:lombok:1.18.2')
 }
