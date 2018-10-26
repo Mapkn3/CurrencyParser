@@ -1,10 +1,12 @@
 package ru.mapkn3.currencyParser.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "currencies", schema = "public", catalog = "postgres")
 public class CurrenciesEntity {

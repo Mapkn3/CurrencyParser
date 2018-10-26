@@ -1,12 +1,14 @@
 package ru.mapkn3.currencyParser.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "currency_rates", schema = "public", catalog = "postgres")
 public class CurrencyRatesEntity {
